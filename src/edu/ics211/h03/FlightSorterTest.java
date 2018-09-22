@@ -143,7 +143,9 @@ public class FlightSorterTest {
         final double longTime = sorter.getSortTime();
         assertTrue("Bad timing", longTime > shortTime);
         copy = Arrays.copyOf(veryLongFlight, veryLongFlight.length);
-        sorter.bubbleSort(copy, abvC);
+        // 20180921 - selectionSort seemed to be dependent upon the changes i made in bubbleSort. was this on purpose?
+        // sorter.bubbleSort(copy, abvC);
+        sorter.selectionSort(copy, abvC);
         final double veryLongTime = sorter.getSortTime();
         assertTrue("Bad timing", veryLongTime > longTime);
     }

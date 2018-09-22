@@ -50,6 +50,21 @@ public class AbvComparator implements Comparator<Beer> {
      */
     @Override
     public int compare(Beer o1, Beer o2) {
-        return (int) (o1.getAbv() - o2.getAbv());
+        // this is faster
+        // return (int) (o1.getAbv() - o2.getAbv());
+        // than the implementation below
+
+        Double b1 = o1.getAbv();
+        Double b2 = o2.getAbv();
+        // # credit: https://medium.com/omarelgabrys-blog/comparing-objects-307400115f88
+        if (b1 > b2) {
+            return 1;
+        } else if (b1 < b2) {
+            return -1;
+        } else if (b1.equals(b2)) {
+            return 0;
+        } else { // unexpected, but you still gotta return something
+            return -2;
+        }
     }
 }

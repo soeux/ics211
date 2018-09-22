@@ -50,12 +50,18 @@ public class IbuComparator implements Comparator<Beer> {
      */
     @Override
     public int compare(Beer o1, Beer o2) {
+        // this is faster
+        // return (o1.getIbu() - o2.getIbu());
+        // than the implementation below
+
+        Integer b1 = o1.getIbu();
+        Integer b2 = o2.getIbu();
         // # credit: https://medium.com/omarelgabrys-blog/comparing-objects-307400115f88
-        if (o1.getIbu() > o2.getIbu()) {
+        if (b1 > b2) {
             return 1;
-        } else if (o1.getIbu() < o2.getIbu()) {
+        } else if (b1 < b2) {
             return -1;
-        } else if (o1.getIbu().equals(o2.getIbu())) {
+        } else if (b1.equals(b2)) {
             return 0;
         } else { // unexpected, but you still gotta return something
             return -2;
