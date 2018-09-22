@@ -39,8 +39,12 @@ public class SortableBeerListTest {
         strongs = new SortableBeerList(abvC);
         for (int i = pils.length - 1; i >= 0; i--) {
             bitters.add(pils[i]);
+            //System.out.println(i + " -> " + pils[i]);
             strongs.add(brewrey.brewBeer("strong beer" + i, brewrey.randomBeerType()));
         }
+//        System.out.println("\n0: " + pils[0] + " -> " + bitters.get(0));
+//        System.out.println("1: " + pils[1] + " -> " + bitters.get(1));
+//        System.out.println("2: " + pils[2] + " -> " + bitters.get(2));
     }
 
 

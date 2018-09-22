@@ -10,14 +10,12 @@ import java.util.Comparator;
  * @author Christian Mancha
  */
 public class SortableBeerList implements IList211<Beer> {
-    private SortableList<Beer> beerList;
+    private SortableList<Beer> beerList = new SortableList<Beer>();
     private Comparator<Beer> compare;
 
     public SortableBeerList(Comparator<Beer> compare) {
         this.compare = compare;
     }
-
-    // for the implementation, since the code is already written in edu.ics211.h04.SortableList we're just gna call it
 
     /**
      * Gets the item at the given index.
@@ -71,7 +69,12 @@ public class SortableBeerList implements IList211<Beer> {
      */
     @Override
     public boolean add(Beer beer) {
-        return beerList.add(beer);
+        boolean cond = beerList.add(beer);
+
+        // resort the array
+        beerList.bubbleSort(compare);
+
+        return cond;
     }
 
     /**
@@ -82,7 +85,10 @@ public class SortableBeerList implements IList211<Beer> {
      */
     @Override
     public void add(int index, Beer element) {
+        // add
         beerList.add(index, element);
+        // resort
+        beerList.bubbleSort(compare);
     }
 
     /**

@@ -74,7 +74,7 @@ public class ArraySorter<E> implements SortsArray<E> {
         timeTracker = 0;
         long localTimeTracker = System.nanoTime();
 
-        //implementation yay
+        // implementation yay
         // loop thru the entire array except the last element
         int n = data.length;
         for (int i = 0; i < n - 1; i++) {
