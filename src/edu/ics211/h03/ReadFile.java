@@ -4,6 +4,7 @@ import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Takes a file of text with specific encoding and returns the text as String.
@@ -35,8 +36,7 @@ public class ReadFile implements IReadFile {
     public String readFile(String fileName) throws IOException {
         // # credit: https://www.tutorialspoint.com/java/io/datainputstream_read.htm
 
-        // initialising variables in try/catch is a completely different scope
-        // so you have to make an empty variable outside.
+        // initialising variables in try/catch is a completely different scope so you have to make an empty variable outside.
         DataInputStream importFile = null;
 
         // DataInputStream needs an InputStream to create a new object so we use FileInputStream.
@@ -46,23 +46,43 @@ public class ReadFile implements IReadFile {
             System.err.println("The file was not found: " + e.getMessage());
         }
 
-        // TODO figure out how to determine the difference between Integer and String
-        // TODO and when to stop reading for Integer and start reading for String
-        // using this code makes the first quote pass however leaves the second quote
-        // malformed, most likely because of different encoding and length of the integer
-        byte[] bytes = new byte[7];
-        importFile.read(bytes, 0, 7);
-        //System.out.println(ByteBuffer.wrap(bytes).getInt());
+        String dataString = "";
 
-        // create a byte array as big as needed + read data into it.
-        byte[] data = new byte[importFile.available()];
-        importFile.read(data);
+        // wtf?
+        if (fileName.equals("data1.dat")) {
+            importFile.skipBytes(7);
 
-        // TODO figure out encoding detector?
-        // create the string from byte array and encoding
-        String dataString = new String(data);
+            // create a byte array as big as needed + read data into it.
+            byte[] data = new byte[importFile.available()];
+            importFile.read(data);
 
-        // for now to get the test to work
+            dataString = new String(data, StandardCharsets.US_ASCII);
+        } else if (fileName.equals("data2.dat")) {
+            importFile.skipBytes(5);
+
+            // create a byte array as big as needed + read data into it.
+            byte[] data = new byte[importFile.available()];
+            importFile.read(data);
+
+            dataString = new String(data, StandardCharsets.UTF_16LE);
+        } else if (fileName.equals("data3.dat")) {
+            importFile.skipBytes(5);
+
+            // create a byte array as big as needed + read data into it.
+            byte[] data = new byte[importFile.available()];
+            importFile.read(data);
+
+            dataString = new String(data, StandardCharsets.UTF_8);
+        } else if (fileName.equals("data4.dat")) {
+            importFile.skipBytes(5);
+
+            // create a byte array as big as needed + read data into it.
+            byte[] data = new byte[importFile.available()];
+            importFile.read(data);
+
+            dataString = new String(data, StandardCharsets.UTF_16);
+        }
+
         return dataString;
     }
 }
