@@ -13,7 +13,7 @@ public class BohemianPilsner extends Pilsner {
      * @param ibu  The IBU of the Pilsner.
      * @param abv  The ABV of the Pilsner.
      */
-    public BohemianPilsner(String name, Integer ibu, double abv) {
+    public BohemianPilsner(String name, Integer ibu, Double abv) {
         super(name, BeerType.BOHEMIAN_PILSNER, ibu, abv);
 
         // make a check for IBU and ABV

@@ -13,7 +13,7 @@ public class IndiaPaleAle extends Beer {
      * @param ibu  IBU of the IndiaPaleAle.
      * @param abv  ABV of the IndiaPaleAle.
      */
-    public IndiaPaleAle(String name, Integer ibu, double abv) {
+    public IndiaPaleAle(String name, Integer ibu, Double abv) {
         super(name, BeerType.INDIA_PALE_ALE, ibu, abv);
 
         // check if IBU and ABV are within acceptable values.

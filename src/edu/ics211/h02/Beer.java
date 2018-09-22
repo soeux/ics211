@@ -11,7 +11,7 @@ public abstract class Beer implements Comparable<Beer> {
     private String name;
     private BeerType type;
     protected Integer ibu;
-    protected double abv;
+    protected Double abv;
 
     // constructors
 
@@ -39,7 +39,7 @@ public abstract class Beer implements Comparable<Beer> {
      * @param ibu IBU of the Beer.
      * @param abv ABV of the Beer.
      */
-    public Beer(String name, BeerType type, Integer ibu, double abv) {
+    public Beer(String name, BeerType type, Integer ibu, Double abv) {
         this.name = name;
         this.type = type;
         this.ibu = ibu;
@@ -89,7 +89,7 @@ public abstract class Beer implements Comparable<Beer> {
      *
      * @return The ABV of the Beer.
      */
-    public double getAbv() {
+    public Double getAbv() {
         return abv;
     }
 

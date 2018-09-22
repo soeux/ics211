@@ -13,7 +13,7 @@ public class Pilsner extends Beer {
      * @param ibu  The IBU of the Pilsner.
      * @param abv  The ABV of the Pilsner.
      */
-    public Pilsner(String name, Integer ibu, double abv) {
+    public Pilsner(String name, Integer ibu, Double abv) {
         super(name, BeerType.PILSNER, ibu, abv);
 
         // check if the IBU and ABV are within acceptable range, if not throw IllegalArgumentException.
@@ -45,7 +45,7 @@ public class Pilsner extends Beer {
      * @param ibu  The IBU of the Pilsner.
      * @param abv  The ABV of the Pilsner.
      */
-    protected Pilsner(String name, BeerType type, Integer ibu, double abv) {
+    protected Pilsner(String name, BeerType type, Integer ibu, Double abv) {
         super(name, type, ibu, abv);
     }
 
