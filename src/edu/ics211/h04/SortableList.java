@@ -71,7 +71,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
     @Override
     public int indexOf(Object obj) {
         // traverse through the array to see if obj exists + return it's index when found
-        for (int i = 0; i < size - 1; i++) {
+        for (int i = 0; i < size; i++) {
             if (obj.equals(data[i])) { // TODO do these objs need .equals overridden?
                 return i;
             }
