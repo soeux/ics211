@@ -72,7 +72,7 @@ public class SortableBeerList implements IList211<Beer> {
         boolean cond = beerList.add(beer);
 
         // resort the array
-        beerList.bubbleSort(compare);
+        beerList.insertionSort(compare);
 
         return cond;
     }
@@ -88,7 +88,7 @@ public class SortableBeerList implements IList211<Beer> {
         // add
         beerList.add(index, element);
         // resort
-        beerList.bubbleSort(compare);
+        beerList.insertionSort(compare);
     }
 
     /**
