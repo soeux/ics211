@@ -13,6 +13,9 @@ import java.util.Comparator;
 public class SortableList<E> implements IList211<E>, ISortableList<E> {
     private DLinkedNode head;
     private int size;
+    private int swapTracker;
+    private int compareTracker;
+    private long timeTracker;
 
     // this is how the data is going to be held
     private class DLinkedNode {
@@ -30,7 +33,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
         this.size = 0;
     }
 
-    // IList211<E>
+    // IList211<E> implementation
 
     /**
      * Gets the item at the given index.
@@ -212,7 +215,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
         }
     }
 
-    // ISortableList<E>
+    // ISortableList<E> implementation
 
     /**
      * Sorts the list using the insertion sort.
@@ -251,7 +254,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public int getNumberOfSwaps() {
-        return 0;
+        return swapTracker;
     }
 
     /**
@@ -261,7 +264,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public int getNumberOfComparisons() {
-        return 0;
+        return compareTracker;
     }
 
     /**
@@ -271,6 +274,6 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public double getSortTime() {
-        return 0;
+        return timeTracker;
     }
 }
