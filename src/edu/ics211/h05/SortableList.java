@@ -21,10 +21,12 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
     private class DLinkedNode {
         E item;
         DLinkedNode next;
+        DLinkedNode prev;
 
-        public DLinkedNode(E item, DLinkedNode next) {
+        public DLinkedNode(E item, DLinkedNode next, DLinkedNode prev) {
             this.item = item;
             this.next = next;
+            this.prev = prev;
         }
     }
 
@@ -54,7 +56,6 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
             temp = temp.next;
         }
 
-        //
         return temp.item;
     }
 
@@ -94,12 +95,13 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
         // traverse thru all the list until obj
         DLinkedNode temp = head;
         for (int i = 0; i < size; i++) {
-            temp = temp.next;
 
             if (temp.item.equals(obj)) {
                 // found obj + return index
                 return i;
             }
+
+            temp = temp.next;
         }
 
         // if you're here, obj wasn't found
@@ -126,7 +128,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
     public boolean add(E e) {
         // special case: empty list
         if (head == null) {
-            head = new DLinkedNode(e, null);
+            head = new DLinkedNode(e, null, null);
 
             // increment size + return
             size++;
@@ -139,7 +141,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
             }
 
             // add the item in it's own DLinkedNode + create a pointer from the Node before to it
-            temp.next = new DLinkedNode(e, null);
+            temp.next = new DLinkedNode(e, null, null);
 
             // increment size + return
             size++;
@@ -163,7 +165,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
         // special case: index is 0
         if (index == 0) {
             // insert Node before head + have it point to head + set it to head
-            head = new DLinkedNode(element, head);
+            head = new DLinkedNode(element, head, null);
             size++;
         } else {
             // traverse thru the list until index
@@ -174,7 +176,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
 
             // TODO what if the index is at the end?
             // create a new Node after index - 1 + have it point to the Node next to it
-            temp.next = new DLinkedNode(element, temp.next);
+            temp.next = new DLinkedNode(element, temp.next, temp);
             size++;
         }
     }
@@ -197,6 +199,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
             // save the old value + set head to head.next + decrement the size + return old value
             E old = head.item;
             head = head.next;
+            head.prev = null;
             size--;
             return old;
         } else {
@@ -210,6 +213,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
             // save the old value + set the pointer to skip next Node + decrement size + return old value
             E old = temp.item;
             temp.next = temp.next.next;
+            temp.next.prev = temp;
             size--;
             return old;
         }
@@ -224,7 +228,37 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public void insertionSort(Comparator<E> compare) {
+        // 0 everything out + start time tracker
+        swapTracker = 0;
+        compareTracker = 0;
+        timeTracker = 0;
+        long localTimeTracker = System.nanoTime();
 
+        // implementation
+        // traverse thru the list
+        for (int i = 1; i < size; i++) {
+            E save = get(i); // what's gna be compared
+            int j = i - 1;
+
+            // 1: we can't get a value at index -1
+            // 2: check if the value at j is less than the value at i -> ascending order
+            while (j >= 0 && compare.compare(get(j), save) > 0) {
+                set(j + 1, get(j));
+                j--;
+
+                // end swap
+                swapTracker++;
+            }
+
+            // move the value we were comparing to the right
+            set(j + 1, save);
+
+            // end compare
+            compareTracker++;
+        }
+
+        // end method
+        timeTracker = System.nanoTime() - localTimeTracker;
     }
 
     /**
@@ -234,7 +268,36 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public void bubbleSort(Comparator<E> compare) {
+        // 0 everything out + start sort time
+        swapTracker = 0;
+        compareTracker = 0;
+        timeTracker = 0;
+        long localTimeTracker = System.nanoTime();
 
+        // implementation
+        // traverse thru the list
+        for (int i = 0; i < size - 1; i++) {
+
+            // start at the position before i and go up the array
+            for (int j = 0; j < size - i - 1; j++) {
+
+                // check if the value of j is less than the value of j+1 -> ascending order
+                if (compare.compare(get(j), get(j + 1)) > 0) {
+                    E save = get(j);
+                    set(j, get(j + 1));
+                    set(j + 1, save);
+
+                    // end swap
+                    swapTracker++;
+                }
+            }
+
+            // end compare
+            compareTracker++;
+        }
+
+        // end method
+        timeTracker = System.nanoTime() - localTimeTracker;
     }
 
     /**
@@ -244,7 +307,40 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
      */
     @Override
     public void selectionSort(Comparator<E> compare) {
+        // 0 everything out + start sort time
+        swapTracker = 0;
+        compareTracker = 0;
+        timeTracker = 0;
+        long localTimeTracker = System.nanoTime();
 
+        // implementation
+        for (int i = 0; i < size - 1; i++) {
+            int min = i; // save index
+
+            // start after i and keep going
+            for (int j = i + 1; j < size; j++) {
+                // if value of i is less than value of j, set min to j
+                if (compare.compare(get(j), get(min)) > 0) {
+                    min = j;
+                }
+
+                // end compare
+                compareTracker++;
+            }
+
+            // if min is equal to i, then there's nothing to swap
+            if (min != i) {
+                E save = get(min);
+                set(min, get(i));
+                set(i, save);
+
+                // end swap
+                swapTracker++;
+            }
+        }
+
+        // end method
+        timeTracker = System.nanoTime() - localTimeTracker;
     }
 
     /**

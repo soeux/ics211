@@ -239,11 +239,10 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
 
         // implementation
         // traverse thru data[], except for the last element
-        int n = size;
-        for (int i = 0; i < n - 1; i++) {
+        for (int i = 0; i < size - 1; i++) {
 
             // start at the position before i and go up the array
-            for (int j = 0; j < n - i - 1; j++) {
+            for (int j = 0; j < size - i - 1; j++) {
 
                 // check if the value of j is less than the value at j+1 -> ascending order
                 if (compare.compare(data[j], data[j + 1]) > 0) {
@@ -255,6 +254,7 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
                     swapTracker++;
                 }
             }
+
             // end compare
             compareTracker++;
         }
