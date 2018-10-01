@@ -1,1 +1,7 @@
 out/*
+.idea/workspace.xml
+cmancha.iml
+.classpath
+.project
+cmancha.eml
+cmancha.userlibraries
