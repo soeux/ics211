@@ -17,6 +17,11 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
     private int compareTracker;
     private long timeTracker;
 
+    public SortableList() {
+        this.head = null;
+        this.size = 0;
+    }
+
     // this is how the data is going to be held
     private class DLinkedNode {
         E item;
@@ -28,11 +33,6 @@ public class SortableList<E> implements IList211<E>, ISortableList<E> {
             this.next = next;
             this.prev = prev;
         }
-    }
-
-    public SortableList() {
-        this.head = null;
-        this.size = 0;
     }
 
     // IList211<E> implementation
