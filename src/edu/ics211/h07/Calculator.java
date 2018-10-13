@@ -8,12 +8,36 @@ import java.util.Stack;
  * @author Christian Mancha
  */
 public class Calculator implements ICalculator {
+    private static Calculator instance;
+    private Stack<Number> calcStack = new Stack<Number>();
+
+    /**
+     * Calculator is a singleton class, so there can only be one instance of it.
+     */
+    private Calculator() {}
+
+    /**
+     * Check to see if Calculator exists. If not, create a new instance, if it does exist then do nothing.
+     *
+     * @return instance of Calculator.
+     */
+    public static Calculator getInstance() {
+        if (instance == null) {
+            instance = new Calculator();
+        }
+
+        return instance;
+    }
+
+
     /**
      * Clears the calculator.
      */
     @Override
     public void clear() {
-
+        while (!calcStack.empty()) {
+            calcStack.pop();
+        }
     }
 
     /**
@@ -26,8 +50,7 @@ public class Calculator implements ICalculator {
     @Override
     public Number postFixCalculate(String expression) throws InvalidExpressionException {
         // # credit: this entire method was taken from an example that was written in class [20181010]
-        // create the stack + split up the expression by spaces
-        Stack<Number> calcStack = new Stack<Number>();
+        // split up the expression by spaces
         String[] tokens = expression.split("\\s+");
 
         for (int i = 0; i < tokens.length; i++) {
@@ -39,7 +62,7 @@ public class Calculator implements ICalculator {
             if (isNumber(token)) {
                 calcStack.push(convertNumber(token));
             } else if (isOperator(token)) {
-                calculate(calcStack, token);
+                calculate(token);
             } else {
                 throw new InvalidExpressionException();
             }
@@ -47,17 +70,63 @@ public class Calculator implements ICalculator {
 
         Number answer = calcStack.pop();
         if (!calcStack.empty()) {
-
+            throw new InvalidExpressionException();
         }
+
+        return answer;
     }
 
     /**
      *
-     * @param calcStack
      * @param token
      */
-    private void calculate(Stack<Number> calcStack, String token) {
+    private void calculate(String token) {
+        // FILO
+        Number second = calcStack.pop();
+        Number first = calcStack.pop();
 
+        // check if any of the numbers are Doubles
+        // if one of them is Double, then all numbers have to be Double.
+        if (second instanceof Double || first instanceof Double) {
+            Double one = first.doubleValue();
+            Double two = second.doubleValue();
+            Double result = null;
+
+            switch(token) {
+                case "+":
+                    result = one + two;
+                case "-":
+                    result = one - two;
+                case "*":
+                    result = one * two;
+                case "/":
+                    result = one / two;
+                default:
+                    break;
+            }
+
+            calcStack.push(result);
+        } else {
+            // if there are no Doubles, do Integer math.
+            Integer one = first.intValue();
+            Integer two = second.intValue();
+            Integer result = null;
+
+            switch(token) {
+                case "+":
+                    result = one + two;
+                case "-":
+                    result = one - two;
+                case "*":
+                    result = one * two;
+                case "/":
+                    result = one / two;
+                default:
+                    break;
+            }
+
+            calcStack.push(result);
+        }
     }
 
     /**
@@ -67,8 +136,8 @@ public class Calculator implements ICalculator {
      * @return Double or Integer representation of token.
      */
     private Number convertNumber(String token) {
-        // check if token is a double with regex
-        if (token.matches("\\.")) {
+        // check if token is a double with regex + return as Number accordingly
+        if (token.matches("\\.?\\d+(\\.\\d+)")) {
             return Double.parseDouble(token);
         } else {
             return Integer.parseInt(token);
