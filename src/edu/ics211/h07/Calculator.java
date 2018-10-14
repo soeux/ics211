@@ -4,7 +4,7 @@ import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**
- * what does it do?
+ * Implements postfix and prefix calculator.
  *
  * @author Christian Mancha
  */
@@ -54,6 +54,7 @@ public class Calculator implements ICalculator {
         // split up the expression by spaces
         String[] tokens = expression.split("\\s+");
 
+        // loop thru the expression
         for (int i = 0; i < tokens.length; i++) {
             String token = tokens[i];
 
@@ -63,13 +64,15 @@ public class Calculator implements ICalculator {
             if (isNumber(token)) {
                 calcStack.push(convertNumber(token));
             } else if (isOperator(token)) {
-                calculate(token);
+                calculatePostFix(token);
             } else {
                 throw new InvalidExpressionException();
             }
         }
 
+        // get the answer + check if everything was calculated
         Number answer = calcStack.pop();
+
         if (!calcStack.empty()) {
             throw new InvalidExpressionException();
         }
@@ -78,10 +81,56 @@ public class Calculator implements ICalculator {
     }
 
     /**
+     * Calculates the answer to the pre-fix expression and returns it as a Number.
+     * This method is optional. You will get extra credit if you implement this method.
+     * Otherwise just throw an UnsupportedOperationException.
+     *
+     * @param expression the pre-fix expression.
+     * @return The answer as a Number.
+     * @throws InvalidExpressionException if the expression is invalid.
+     */
+    @Override
+    public Number preFixCalculate(String expression) throws InvalidExpressionException {
+        // worry about this one later since it uses a different notation
+        //throw new UnsupportedOperationException();
+
+        // the way you implement this is the same as postfix, but backwards
+        String[] tokens = expression.split("\\s+");
+
+        // loop thru the expression
+        calcStack.clear();
+        for (int i = tokens.length - 1; i >= 0; i--) {
+            String token = tokens[i];
+
+            // check if number: push to stack
+            // check if operator: calculate
+            // else: invalid expression exception
+            if (isNumber(token)) {
+                calcStack.push(convertNumber(token));
+            } else if (isOperator(token)) {
+                calculatePreFix(token);
+            } else {
+                throw new InvalidExpressionException();
+            }
+        }
+
+        // get the answer + check if everything was calculated
+        Number answer = calcStack.pop();
+
+        if (!calcStack.empty()) {
+            throw new InvalidExpressionException();
+        }
+
+        return answer;
+    }
+
+    /**
+     * Does actual postfix calculation.
      *
      * @param token The operator used to do the calculation.
+     * @throws InvalidExpressionException If the expression was incorrect.
      */
-    private void calculate(String token) throws InvalidExpressionException {
+    private void calculatePostFix(String token) throws InvalidExpressionException {
         // FILO
         // check if we have two operands to even do a calculation
         Number second, first;
@@ -114,7 +163,69 @@ public class Calculator implements ICalculator {
                 default:
                     break;
             }
+        } else { // if there are no Doubles, do Integer math.
+            Integer one = first.intValue();
+            Integer two = second.intValue();
 
+            switch(token) {
+                case "+":
+                    calcStack.push(one + two);
+                    break;
+                case "-":
+                    calcStack.push(one - two);
+                    break;
+                case "*":
+                    calcStack.push(one * two);
+                    break;
+                case "/":
+                    calcStack.push(one / two);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Does actual prefix calculations.
+     *
+     * @param token The operator used to do the calculation.
+     * @throws InvalidExpressionException If the expression is incorrect.
+     */
+    private void calculatePreFix(String token) throws InvalidExpressionException {
+        // FILO
+        // check if we have two operands to even do a calculation
+        Number second, first;
+        try {
+            // because we're looping backwards, we have to change the order we pop the numbers off the stack
+            first = calcStack.pop();
+            second = calcStack.pop();
+        } catch (EmptyStackException e) {
+            throw new InvalidExpressionException();
+        }
+
+        // check if any of the numbers are Doubles
+        // if one operand is Double, then the entire calculation will be Double.
+        if (second instanceof Double || first instanceof Double) {
+            Double one = first.doubleValue();
+            Double two = second.doubleValue();
+
+            switch(token) {
+                case "+":
+                    calcStack.push(one + two);
+                    break;
+                case "-":
+                    calcStack.push(one - two);
+                    break;
+                case "*":
+                    calcStack.push(one * two);
+                    break;
+                case "/":
+                    calcStack.push(one / two);
+                    break;
+                default:
+                    break;
+            }
         } else { // if there are no Doubles, do Integer math.
             Integer one = first.intValue();
             Integer two = second.intValue();
@@ -154,6 +265,7 @@ public class Calculator implements ICalculator {
     }
 
     /**
+     * Checks if a String is an operator.
      *
      * @param token value we're checking.
      * @return true if it's an operator; false otherwise.
@@ -173,7 +285,7 @@ public class Calculator implements ICalculator {
     }
 
     /**
-     * Checks a string is a number with regex.
+     * Checks if a String is a number with regex.
      *
      * @param token value we're checking.
      * @return true if number; false otherwise.
@@ -181,20 +293,5 @@ public class Calculator implements ICalculator {
     private boolean isNumber(String token) {
         // # credit: https://regexr.com/4113k
         return token.matches("-?\\.?\\d+(\\.\\d+)?");
-    }
-
-    /**
-     * Calculates the answer to the pre-fix expression and returns it as a Number.
-     * This method is optional. You will get extra credit if you implement this method.
-     * Otherwise just throw an UnsupportedOperationException.
-     *
-     * @param expression the pre-fix expression.
-     * @return The answer as a Number.
-     * @throws InvalidExpressionException if the expression is invalid.
-     */
-    @Override
-    public Number preFixCalculate(String expression) throws InvalidExpressionException {
-        // worry about this one later since it uses a different notation
-        throw new UnsupportedOperationException();
     }
 }
