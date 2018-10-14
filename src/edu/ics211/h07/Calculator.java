@@ -1,5 +1,6 @@
 package edu.ics211.h07;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 /**
@@ -78,54 +79,62 @@ public class Calculator implements ICalculator {
 
     /**
      *
-     * @param token
+     * @param token The operator used to do the calculation.
      */
-    private void calculate(String token) {
+    private void calculate(String token) throws InvalidExpressionException {
         // FILO
-        Number second = calcStack.pop();
-        Number first = calcStack.pop();
+        // check if we have two operands to even do a calculation
+        Number second, first;
+        try {
+            second = calcStack.pop();
+            first = calcStack.pop();
+        } catch (EmptyStackException e) {
+            throw new InvalidExpressionException();
+        }
 
         // check if any of the numbers are Doubles
-        // if one of them is Double, then all numbers have to be Double.
+        // if one operand is Double, then the entire calculation will be Double.
         if (second instanceof Double || first instanceof Double) {
             Double one = first.doubleValue();
             Double two = second.doubleValue();
-            Double result = null;
 
             switch(token) {
                 case "+":
-                    result = one + two;
+                    calcStack.push(one + two);
+                    break;
                 case "-":
-                    result = one - two;
+                    calcStack.push(one - two);
+                    break;
                 case "*":
-                    result = one * two;
+                    calcStack.push(one * two);
+                    break;
                 case "/":
-                    result = one / two;
+                    calcStack.push(one / two);
+                    break;
                 default:
                     break;
             }
 
-            calcStack.push(result);
-        } else {
-            // if there are no Doubles, do Integer math.
+        } else { // if there are no Doubles, do Integer math.
             Integer one = first.intValue();
             Integer two = second.intValue();
-            Integer result = null;
 
             switch(token) {
                 case "+":
-                    result = one + two;
+                    calcStack.push(one + two);
+                    break;
                 case "-":
-                    result = one - two;
+                    calcStack.push(one - two);
+                    break;
                 case "*":
-                    result = one * two;
+                    calcStack.push(one * two);
+                    break;
                 case "/":
-                    result = one / two;
+                    calcStack.push(one / two);
+                    break;
                 default:
                     break;
             }
-
-            calcStack.push(result);
         }
     }
 
@@ -150,6 +159,7 @@ public class Calculator implements ICalculator {
      * @return true if it's an operator; false otherwise.
      */
     private boolean isOperator(String token) {
+        // what's better in this case? switch/case or regex?
         switch (token) {
             case "+":
             case "-":
@@ -159,6 +169,7 @@ public class Calculator implements ICalculator {
             default:
                 return false;
         }
+        //return token.matches("[\\+\\-\\*\\/]]");
     }
 
     /**
