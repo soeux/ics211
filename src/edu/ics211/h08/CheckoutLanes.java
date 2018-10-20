@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * what does it do?
+ * Simulates the checkout process with Queues.
  *
  * @author Christian Mancha
  */
@@ -21,6 +21,11 @@ public class CheckoutLanes implements ICheckoutLanes {
      * @param numRegular The number of regular lanes.
      */
     public CheckoutLanes(int numExpress, int numRegular) {
+        // there at least has to be 1 regular line
+        if (numRegular == 0) {
+            throw new IllegalArgumentException();
+        }
+
         this.express = numExpress;
         this.regular = numRegular;
 
