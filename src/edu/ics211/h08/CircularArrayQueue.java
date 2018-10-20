@@ -56,7 +56,7 @@ public class CircularArrayQueue<E> implements Queue211<E> {
         // add() without the exception
         try {
             return add(e);
-        } catch (IllegalStateException e) {
+        } catch (IllegalStateException z) {
             return false;
         }
     }
@@ -89,7 +89,7 @@ public class CircularArrayQueue<E> implements Queue211<E> {
         // element() without the exception
         try {
             return element();
-        } catch (NoSuchElementException) {
+        } catch (NoSuchElementException e) {
             return null;
         }
     }
