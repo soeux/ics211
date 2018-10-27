@@ -21,7 +21,42 @@ public class HexadecimalSudoku {
      */
     public static boolean solveSudoku(int[][] sudoku) {
         // TODO: Implement this method recursively. You may use a recursive helper method.
-        throw new UnsupportedOperationException("solveSudoku not implemented.");
+
+        // start by looking for the first empty cell
+        for (int i = 0; i < sudoku.length; i++) {
+            for (int j = 0; j < sudoku.length; j++) {
+                if (sudoku[i][j] == -1) {
+                    // when the first empty cell is found, get a list of all possible legal values for that cell
+                    ArrayList<Integer> valuesToTry = legalValues(sudoku, i, j);
+
+                    // if there are no legal values, return false to backtrack
+                    if (valuesToTry.size() == 0) {
+                        return false;
+                    }
+
+                    // start going through the list of possible legal values and assigning it to the empty cell
+                    for (int k = 0; k < valuesToTry.size(); k++) {
+                        sudoku[i][j] = valuesToTry.get(k);
+
+                        // with a legal value assigned, call solveSudoku() again to see if it leads to a solution
+                        if (solveSudoku(sudoku)) {
+                            return true;
+                        } else {
+                            // if it doesn't lead to a solution, reset the cell
+                            sudoku[i][j] = -1;
+                        }
+                    }
+
+                    // if this point is reached, then there was no solution, return false to backtrack
+                    return false;
+                }
+            }
+        }
+
+        // if there are no empty cells, check the sudoku
+        checkSudoku(sudoku, true);
+
+        return true;
     }
 
     /**
@@ -32,10 +67,25 @@ public class HexadecimalSudoku {
      * @param col    the column of the cell.
      * @return an ArrayList of the valid values.
      */
-    public static ArrayList<Integer> legalValues(int[][] sudoku, int row, int column) {
-        // TODO: Implement this method. You may want to look at the checkSudoku method
-        // to see how it finds conflicts.
-        return null;
+    public static ArrayList<Integer> legalValues(int[][] sudoku, int row, int col) {
+        // check if the cell has a value in it
+        if (sudoku[row][col] != -1) {
+            return null;
+        }
+
+        // create an ArrayList to hold potential legal values
+        ArrayList<Integer> legalVals = new ArrayList<Integer>();
+
+        for (int i = 0; i < 16; i++) {
+            sudoku[row][col] = i;
+            if (checkSudoku(sudoku, false)) {
+                legalVals.add(i);
+            }
+        }
+
+        // return possible legal values
+        sudoku[row][col] = -1;
+        return legalVals;
     }
 
 
@@ -57,8 +107,7 @@ public class HexadecimalSudoku {
         for (int i = 0; i < sudoku.length; i++) {
             if (sudoku[i].length != 16) {
                 if (printErrors) {
-                    System.out.println("sudoku row " + i + " has "
-                            + sudoku[i].length + " cells, should have 16");
+                    System.out.println("sudoku row " + i + " has " + sudoku[i].length + " cells, should have 16");
                 }
                 return false;
             }
