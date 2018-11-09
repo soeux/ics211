@@ -20,8 +20,6 @@ public class HexadecimalSudoku {
      * sudoku to its original value.
      */
     public static boolean solveSudoku(int[][] sudoku) {
-        // TODO: Implement this method recursively. You may use a recursive helper method.
-
         // start by looking for the first empty cell
         for (int i = 0; i < sudoku.length; i++) {
             for (int j = 0; j < sudoku.length; j++) {

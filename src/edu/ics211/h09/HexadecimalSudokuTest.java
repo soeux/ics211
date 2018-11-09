@@ -223,8 +223,8 @@ public class HexadecimalSudokuTest {
                 {6, -1, 15, -1, 9, -1, -1, 1, 13, -1, 5, -1, -1, 14, -1, -1}};
 
         testSudoku("example 1", example1, solution1);
-        testSudoku("example 2", example2, solution2);
-        testSudoku("Hard", example3, solution3);
-        testSudoku("Harder/Impossible?", example4, null);
+        //testSudoku("example 2", example2, solution2);
+        //testSudoku("Hard", example3, solution3);
+        //testSudoku("Harder/Impossible?", example4, null);
     }
 }
