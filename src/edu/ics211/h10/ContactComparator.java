@@ -3,7 +3,7 @@ package edu.ics211.h10;
 import java.util.Comparator;
 
 /**
- * what does it do?
+ * Compares two contacts by their last name then first name.
  *
  * @author Christian Mancha
  */
@@ -50,8 +50,13 @@ public class ContactComparator implements Comparator<Contact> {
      */
     @Override
     public int compare(Contact o1, Contact o2) {
-        // TODO: implement the contact comparator
-        // It should sort by last name then first name.
-        return 0;
+        int lastNameComp = o1.getLastName().compareToIgnoreCase(o2.getLastName());
+
+        // if the last names are the same
+        if (lastNameComp == 0) {
+            return o1.getFirstName().compareToIgnoreCase(o2.getFirstName());
+        }
+
+        return lastNameComp;
     }
 }
