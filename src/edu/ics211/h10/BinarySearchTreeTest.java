@@ -86,11 +86,13 @@ public class BinarySearchTreeTest {
     @Test
     public void testInorder() {
         List<Contact> contacts = tree.inorder();
+        for (int i = 0; i < contacts.size(); i++) {
+            System.out.println(contacts.get(i).getFirstName() + " " + contacts.get(i).getLastName());
+        }
         assertNotNull(contacts);
         assertEquals(contacts.size(), 8);
         assertTrue(contacts.get(0).equals(new Contact("Sir", "Arthur", "123458")));
         assertTrue(contacts.get(7).equals(new Contact("Sir", "William", "123456")));
         assertTrue(contacts.get(5).equals(new Contact("Foo", "Moore", "808-555-1234")));
     }
-
 }

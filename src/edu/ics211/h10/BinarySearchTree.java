@@ -1,5 +1,7 @@
 package edu.ics211.h10;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -72,7 +74,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
      */
     @Override
     public boolean contains(E item) {
-        return false;
+        return find(item) != null;
     }
 
     /**
@@ -88,6 +90,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
 
     private E find(Node<E> localRoot, E target) {
         // tree is empty, nothing to find
+        // also the base case for which we'll know when we've reached the end
         if (localRoot == null) {
             return null;
         }
@@ -171,7 +174,7 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
      */
     @Override
     public boolean remove(E target) {
-        return false;
+        return delete(target) != null;
     }
 
     // InOrder<E>
