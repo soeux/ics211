@@ -1,12 +1,11 @@
 package edu.ics211.h10;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
 /**
- * what does it do?
+ * Implements BinarySearchTree.
  *
  * @author Christian Mancha
  */
@@ -43,6 +42,13 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
         return addReturn; // because the second add() will return a Node<E>, it'll also set addReturn and we can return that
     }
 
+    /**
+     * Recursively adds an item to the tree at the spot it belongs.
+     *
+     * @param localRoot the root of the tree.
+     * @param item the item being added.
+     * @return the new tree.
+     */
     private Node<E> add(Node<E> localRoot, E item) {
         // tree is empty, just insert the item
         // this is also the base case for which we actually add item.
@@ -88,6 +94,13 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
         return find(root, target); // need a recursive solution
     }
 
+    /**
+     * Recursively finds an item in given tree.
+     *
+     * @param localRoot the root of the tree.
+     * @param target the item to find.
+     * @return the item if found, null otherwise.
+     */
     private E find(Node<E> localRoot, E target) {
         // tree is empty, nothing to find
         // also the base case for which we'll know when we've reached the end
@@ -119,6 +132,13 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
         return deleteReturn; // same as the add() method, the second delete() method will return a Node<E>, and it'll also set deleteReturn so we can return that.
     }
 
+    /**
+     * Recursively deletes an item from a tree.
+     *
+     * @param localRoot the root of the tree.
+     * @param item the item to delete.
+     * @return the new tree.
+     */
     private Node<E> delete(Node<E> localRoot, E item) {
         // tree is empty, nothing to delete
         if (localRoot == null) {
@@ -156,6 +176,12 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
         }
     }
 
+    /**
+     * Finds the inorder predecessor of the given tree.
+     *
+     * @param parent the root of the tree.
+     * @return the data of the inorder predecessor.
+     */
     private E findLargestChild(Node<E> parent) {
         if (parent.right.right == null) { // if the right child has no right child, then it's the inorder predecessor
             E returnValue = parent.right.data;
@@ -185,6 +211,37 @@ public class BinarySearchTree<E> extends BinaryTree<E> implements SearchTree<E>,
      */
     @Override
     public List<E> inorder() {
-        return null;
+        // create a list
+        ArrayList<E> dummy = new ArrayList<E>();
+
+        // populate thru recursion + return the list
+        return inOrderRecursive(root, dummy);
+    }
+
+    /**
+     * Recursively gets the data out of a given tree in sorted order.
+     *
+     * @param localRoot the root of the tree.
+     * @param inOrderList the list to be populated.
+     * @return the items of a tree in sorted order.
+     */
+    private ArrayList<E> inOrderRecursive(Node<E> localRoot, ArrayList<E> inOrderList) {
+        // in order: left, root, right
+
+        // go through the left
+        if (localRoot.left != null) {
+            inOrderRecursive(localRoot.left, inOrderList);
+        }
+
+        // base case
+        inOrderList.add(localRoot.data);
+
+        // go through the right
+        if (localRoot.right != null) {
+            inOrderRecursive(localRoot.right, inOrderList);
+        }
+
+        // return what we have so far?
+        return inOrderList;
     }
 }
