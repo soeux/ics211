@@ -43,6 +43,7 @@ public class Huffman {
 
     public static final String HUFF_EXT = ".huff";
     private HuffmanNode<Byte> root;
+    private int decodeCounter;
 
 
     /**
@@ -104,7 +105,47 @@ public class Huffman {
      * @throws IOException If cannot read from stream.
      */
     public Huffman(BitReader input) throws IOException {
-        throw new UnsupportedOperationException();
+        // this is going to need a recursive solution
+        this.root = recursiveHuffman(input, root, 0);
+        //whatsInside(input);
+    }
+
+//    private void whatsInside(BitReader input) {
+//        System.out.print("bytes in file: ");
+//        while (true) {
+//            if (!input.read()) {
+//                ;
+//            } else if (input.read()) {
+//                Byte w = input.readByte();
+//                if (w == -1) {
+//                    break;
+//                }
+//                System.out.printf("0x%02X", w);
+//                System.out.print(", ");
+//            }
+//        }
+//    }
+
+
+    private HuffmanNode<Byte> recursiveHuffman(BitReader input, HuffmanNode<Byte> localRoot, int counter) {
+        // preorder: root -> left -> right
+        // i really have no idea what to do with the count field
+        // 20181115 - TA said the count doesn't matter
+
+        int type = input.readAsInt();
+
+        if (type == 0) {
+            // we're at an internal node
+            localRoot = new HuffmanNode<Byte>(null, counter);
+
+            localRoot.setLeft(recursiveHuffman(input, localRoot.getLeft(), counter + 1));
+            localRoot.setRight(recursiveHuffman(input, localRoot.getRight(), counter + 1));
+        } else if (type == 1) {
+            // we're at a leaf node
+            localRoot = new HuffmanNode<Byte>(input.readByte(), counter);
+        }
+
+        return localRoot;
     }
 
 
@@ -119,7 +160,37 @@ public class Huffman {
      * @throws IOException If can't read/write from/to streams
      */
     public void decode(int bytes, BitReader in, OutputStream out) throws IOException {
-        throw new UnsupportedOperationException();
+        // this needs a recursive solution
+
+        byte[] decoded = new byte[bytes];
+        decodeCounter = 0;
+
+        while (bytes > 0) {
+            decoded = recursiveDecode(in, root, decoded);
+            bytes--;
+        }
+
+        out.write(decoded);
+    }
+
+    private byte[] recursiveDecode(BitReader in, HuffmanNode<Byte> localRoot, byte[] list) {
+        // leaf node
+        if (localRoot.getLeft() == null && localRoot.getRight() == null) {
+            list[decodeCounter] = localRoot.getData();
+            decodeCounter++;
+        } else {
+            int where = in.readAsInt();
+
+            if (where == 0) {
+                // go left
+                recursiveDecode(in, localRoot.getLeft(), list);
+            } else if (where == 1) {
+                // go right
+                recursiveDecode(in, localRoot.getRight(), list);
+            }
+        }
+
+        return list;
     }
 
 
@@ -318,10 +389,13 @@ public class Huffman {
      * @throws IOException If there are any read/write error.
      */
     public static void decompress(InputStream in, OutputStream out) throws IOException {
-        throw new UnsupportedOperationException("You have not implemented this yet.");
         // wrap input stream in a BitReader
+        BitReader targetFile = new BitReader(in);
         // read in byte count from BitReader
+        int count = targetFile.readInt();
         // build a tree = new Huffman(BitReader)
+        Huffman tree = new Huffman(targetFile);
         // use tree to decode given number of byte from bitreader
+        tree.decode(count, targetFile, out);
     }
 }
