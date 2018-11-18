@@ -107,26 +107,17 @@ public class Huffman {
     public Huffman(BitReader input) throws IOException {
         // this is going to need a recursive solution
         this.root = recursiveHuffman(input, root, 0);
-        //whatsInside(input);
     }
 
-//    private void whatsInside(BitReader input) {
-//        System.out.print("bytes in file: ");
-//        while (true) {
-//            if (!input.read()) {
-//                ;
-//            } else if (input.read()) {
-//                Byte w = input.readByte();
-//                if (w == -1) {
-//                    break;
-//                }
-//                System.out.printf("0x%02X", w);
-//                System.out.print(", ");
-//            }
-//        }
-//    }
 
-
+    /**
+     * Recursively creates a binary tree from InputStream.
+     *
+     * @param input InputStream where binary tree structure and data comes from.
+     * @param localRoot Where we're currently at in the tree.
+     * @param counter The count of the node.
+     * @return
+     */
     private HuffmanNode<Byte> recursiveHuffman(BitReader input, HuffmanNode<Byte> localRoot, int counter) {
         // preorder: root -> left -> right
         // i really have no idea what to do with the count field
@@ -173,6 +164,15 @@ public class Huffman {
         out.write(decoded);
     }
 
+
+    /**
+     * Recursively decodes the data using the binary tree created from the constructor and codes from input stream.
+     *
+     * @param in where the codes from.
+     * @param localRoot where we're currently at in the tree.
+     * @param list the decoded data.
+     * @return
+     */
     private byte[] recursiveDecode(BitReader in, HuffmanNode<Byte> localRoot, byte[] list) {
         // leaf node
         if (localRoot.getLeft() == null && localRoot.getRight() == null) {
